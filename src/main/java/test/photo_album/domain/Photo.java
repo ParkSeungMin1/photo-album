@@ -1,10 +1,14 @@
 package test.photo_album.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@EntityListeners(AuditingEntityListener.class)
 public class Photo {
 
     @Id
@@ -22,8 +26,8 @@ public class Photo {
     @JoinColumn(name = "album_id")
     private Album album;
 
-    @PrePersist
-    protected void upload(){
-        uploadedAt = LocalDateTime.now();
+    public void setAlbum(Album album) {
+        this.album = album;
     }
+
 }

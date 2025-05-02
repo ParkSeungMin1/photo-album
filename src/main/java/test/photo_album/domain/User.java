@@ -3,6 +3,8 @@ package test.photo_album.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -10,6 +12,7 @@ import java.util.Date;
 @Entity
 @Table(name = "app_users")
 @Getter
+@EntityListeners(AuditingEntityListener.class)
 public class User {
 
     @Id @GeneratedValue
@@ -19,6 +22,7 @@ public class User {
     private String name;
     private String password;
     private String email;
+    @CreatedDate
     private LocalDateTime createdAt;
     private LocalDateTime loginAt;
 
@@ -29,11 +33,6 @@ public class User {
         this.name = name;
         this.password = password;
         this.email = email;
-    }
-
-    @PrePersist
-    protected void create(){
-        createdAt = LocalDateTime.now();
     }
 
     @Override
