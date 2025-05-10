@@ -27,18 +27,8 @@ public class Album {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Photo> photos = new ArrayList<>();
-
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public void addPhoto(Photo photo){
-        this.photos.add(photo);
-        if(photo.getAlbum() != this){
-            photo.setAlbum(this);
-        }
     }
 
     public void changeAlbumName(String name){

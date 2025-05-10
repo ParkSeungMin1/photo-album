@@ -34,7 +34,12 @@ dependencies {
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	testAnnotationProcessor ("org.projectlombok:lombok") // 테스트를 위한 세팅 @Slf4j
 	testImplementation ("org.projectlombok:lombok") // 테스트를 위한 세팅 @Slf4j
+	implementation ("com.querydsl:querydsl-jpa:5.0.0:jakarta")
+	annotationProcessor ("com.querydsl:querydsl-apt:5.0.0:jakarta")
+	annotationProcessor ("jakarta.annotation:jakarta.annotation-api")
+	annotationProcessor ("jakarta.persistence:jakarta.persistence-api")
 }
+
 
 tasks.withType<Test> {
 	useJUnitPlatform()

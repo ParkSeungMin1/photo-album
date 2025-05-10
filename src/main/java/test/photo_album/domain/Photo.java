@@ -2,6 +2,8 @@ package test.photo_album.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -9,6 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor
 public class Photo {
 
     @Id
@@ -20,6 +23,7 @@ public class Photo {
     private String thumbUrl;
     private String originalUrl;
     private Long fileSize;
+    @CreatedDate
     private LocalDateTime uploadedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -30,4 +34,11 @@ public class Photo {
         this.album = album;
     }
 
+    public Photo(String fileName, String thumbUrl, String originalUrl, Long fileSize, Album album) {
+        this.fileName = fileName;
+        this.thumbUrl = thumbUrl;
+        this.originalUrl = originalUrl;
+        this.fileSize = fileSize;
+        this.album = album;
+    }
 }

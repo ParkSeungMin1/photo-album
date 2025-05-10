@@ -6,6 +6,5 @@ import test.photo_album.domain.Photo;
 
 import java.util.List;
 
-public interface PhotoRepository extends JpaRepository<Photo,Long> {
-    List<Photo> findByAlbumId(Long AlbumId);
+public interface PhotoRepository extends JpaRepository<Photo,Long>, PhotoRepositoryCustom {
 }

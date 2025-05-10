@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import test.photo_album.dto.AlbumDto;
 import test.photo_album.service.AlbumService;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -38,4 +40,9 @@ public class AlbumController {
         return albumService.getAlbum(albumId);
     }
 
+    @GetMapping
+    public List<AlbumDto> getAlbums(@RequestParam LocalDateTime sort, @RequestParam String keyword){
+        List<AlbumDto> albums = albumService.getAlbums(sort, keyword);
+        return albums;
+    }
 }

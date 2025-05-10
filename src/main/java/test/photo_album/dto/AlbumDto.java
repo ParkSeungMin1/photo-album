@@ -11,7 +11,6 @@ import java.util.List;
 @Data
 @Builder
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
-@EqualsAndHashCode
 public class AlbumDto {
     private Long albumId;
     private String albumName;

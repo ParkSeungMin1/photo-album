@@ -11,6 +11,9 @@ import test.photo_album.domain.Album;
 import test.photo_album.dto.AlbumDto;
 import test.photo_album.repository.AlbumRepository;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,5 +61,20 @@ class AlbumServiceTest {
         AlbumDto findAlbum = albumService.getAlbum(album.getAlbumId());
         assertThat(album.getAlbumId()).isEqualTo(findAlbum.getAlbumId());
         assertThat(album.getAlbumName()).isEqualTo(findAlbum.getAlbumName());
+    }
+
+    @Test
+    void 앨범검색(){
+        AlbumDto album = albumService.createAlbum("나의 앨범");
+        AlbumDto album2 = albumService.createAlbum("나의 앨범2");
+        em.flush();
+        em.clear();
+        LocalDateTime localDateTime = LocalDateTime.of(2024, 1, 5, 4, 3, 2);
+        List<AlbumDto> albums = albumService.getAlbums(localDateTime, "앨범");
+        log.info("size = {}",albums.size());
+        for (AlbumDto albumDto : albums) {
+            log.info("albumDto : {}",albumDto);
+        }
+
     }
 }
