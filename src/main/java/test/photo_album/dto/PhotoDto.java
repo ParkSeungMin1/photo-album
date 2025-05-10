@@ -13,6 +13,8 @@ public class PhotoDto {
 
     private Long photoId;
     private String fileName;
+    private String originalUrl;
     private String thumbUrl;
     private LocalDateTime uploadedAt;
+    private Long fileSize;
 }

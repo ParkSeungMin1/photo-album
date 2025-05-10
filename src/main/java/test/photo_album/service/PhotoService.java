@@ -1,6 +1,8 @@
 package test.photo_album.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,6 +13,7 @@ import test.photo_album.repository.AlbumRepository;
 import test.photo_album.repository.PhotoRepository;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -58,6 +61,24 @@ public class PhotoService {
         photoRepository.saveAll(photos);
         photosDto = getPhotosDto(photos);
         return photosDto;
+    }
+
+    /**
+     * 사진 상세정보 가져오기
+     */
+    public PhotoDto getPhoto(Long albumId, Long photoId){
+        Photo photo = photoRepository.findByIdAndAlbum_id(photoId, albumId);
+        return getPhotoDto(photo);
+    }
+
+    private PhotoDto getPhotoDto(Photo photo) {
+        return PhotoDto.builder()
+                .photoId(photo.getId())
+                .fileName(photo.getFileName())
+                .originalUrl(photo.getOriginalUrl())
+                .uploadedAt(photo.getUploadedAt())
+                .fileSize(photo.getFileSize())
+                .build();
     }
 
     private String getExt(MultipartFile multipartFile){

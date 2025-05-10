@@ -37,4 +37,9 @@ public class PhotoController {
         response.put("photos",photo);
         return response;
     }
+
+    @GetMapping("/{albumId}/photos/{photoId}")
+    public PhotoDto getPhoto(@PathVariable Long albumId, @PathVariable Long photoId){
+        return photoService.getPhoto(albumId, photoId);
+    }
 }
