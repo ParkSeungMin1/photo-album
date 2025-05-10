@@ -4,19 +4,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import test.photo_album.domain.Album;
-import test.photo_album.domain.Photo;
-import test.photo_album.domain.QAlbum;
+import test.photo_album.domain.entity.Album;
+import test.photo_album.domain.entity.Photo;
 import test.photo_album.dto.PhotoDto;
 import test.photo_album.repository.AlbumRepository;
 import test.photo_album.repository.PhotoRepository;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import static test.photo_album.domain.QAlbum.album;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +26,7 @@ public class PhotoService {
 
     private final PhotoRepository photoRepository;
     private final AlbumRepository albumRepository;
-
+    private static final String UPLOAD_PATH = "C:/Users/user/Desktop/photo-album/src/main/resources/images/";
     /**
      * 사진 목록 불러오기
      */
@@ -43,11 +44,30 @@ public class PhotoService {
         List<PhotoDto> photosDto = new ArrayList<>();
         List<Photo> photos = new ArrayList<>();
         for (MultipartFile file : files) {
-            photos.add(new Photo(file.getOriginalFilename(), "https://thumb/"+file.getOriginalFilename(), "https://thumb/"+file.getName(),file.getSize(),album));
+            String ext = getExt(file);
+            String storedFilename = UUID.randomUUID().toString()+'.'+ext;
+            try {
+                Path filePath = Paths.get(UPLOAD_PATH,storedFilename);
+                Files.createDirectories(filePath.getParent());
+                file.transferTo(filePath.toFile());
+                photos.add(new Photo(file.getOriginalFilename(), filePath.toString(), storedFilename,file.getSize(),album));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         photoRepository.saveAll(photos);
         photosDto = getPhotosDto(photos);
         return photosDto;
+    }
+
+    private String getExt(MultipartFile multipartFile){
+        String originalFilename = multipartFile.getOriginalFilename();
+        String ext = "";
+        int pos = originalFilename.lastIndexOf(".");
+        if (pos != -1) {
+            ext = originalFilename.substring(pos + 1);
+        }
+        return ext;
     }
 
     private List<PhotoDto> getPhotosDto(List<Photo> photos) {

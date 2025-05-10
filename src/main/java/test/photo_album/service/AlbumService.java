@@ -3,17 +3,13 @@ package test.photo_album.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import test.photo_album.domain.Album;
-import test.photo_album.domain.Photo;
+import test.photo_album.domain.entity.Album;
 import test.photo_album.dto.AlbumDto;
-import test.photo_album.dto.PhotoDto;
 import test.photo_album.repository.AlbumRepository;
-import test.photo_album.repository.PhotoRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional

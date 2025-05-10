@@ -1,15 +1,11 @@
 package test.photo_album.repository;
 
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import test.photo_album.domain.Album;
-import test.photo_album.domain.Photo;
-import test.photo_album.domain.QAlbum;
-import test.photo_album.domain.QPhoto;
+import test.photo_album.domain.entity.Photo;
+import test.photo_album.domain.entity.QPhoto;
 
 import java.time.LocalDateTime;
 import java.util.List;

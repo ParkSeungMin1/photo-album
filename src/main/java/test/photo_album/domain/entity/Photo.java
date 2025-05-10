@@ -1,4 +1,4 @@
-package test.photo_album.domain;
+package test.photo_album.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

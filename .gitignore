@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# 사용자 업로드 이미지 디렉토리 제외
+/src/main/resources/images/

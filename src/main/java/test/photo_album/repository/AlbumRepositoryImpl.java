@@ -1,14 +1,11 @@
 package test.photo_album.repository;
 
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import test.photo_album.domain.Album;
-import test.photo_album.domain.Photo;
-import test.photo_album.domain.QAlbum;
+import test.photo_album.domain.entity.Album;
+import test.photo_album.domain.entity.QAlbum;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,7 +14,7 @@ import java.util.List;
 public class AlbumRepositoryImpl implements AlbumRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
-    private final QAlbum album = QAlbum.album;
+    private final test.photo_album.domain.entity.QAlbum album = QAlbum.album;
 
     public AlbumRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
