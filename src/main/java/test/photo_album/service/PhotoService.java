@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import test.photo_album.domain.entity.Album;
 import test.photo_album.domain.entity.Photo;
 import test.photo_album.dto.PhotoDto;
+import test.photo_album.dto.PhotosDto;
 import test.photo_album.repository.AlbumRepository;
 import test.photo_album.repository.PhotoRepository;
 
@@ -34,7 +35,7 @@ public class PhotoService {
     /**
      * 사진 목록 불러오기
      */
-    public List<PhotoDto> getPhotos(Long albumId, LocalDateTime byDate, String byName){
+    public PhotosDto getPhotos(Long albumId, LocalDateTime byDate, String byName){
         return getPhotosDto(photoRepository.searchPhotos(albumId,byDate,byName));
     }
 
@@ -42,7 +43,7 @@ public class PhotoService {
      * 사진 업로드
      * 쿼리 두번 나가야하는지? save 쿼리, albumId로 album 조회 쿼리
      */
-    public List<PhotoDto> uploadPhotos(Long albumId,List<MultipartFile> files){
+    public PhotosDto uploadPhotos(Long albumId,List<MultipartFile> files){
         Album album = albumRepository.findById(albumId).get();
         List<Photo> photos = new ArrayList<>();
         for (MultipartFile file : files) {
@@ -64,7 +65,7 @@ public class PhotoService {
     /**
      * 사진 지우기
      */
-    public List<PhotoDto> deletePhotos(Long albumId, List<Long> photoIds){
+    public PhotosDto deletePhotos(Long albumId, List<Long> photoIds){
         photoRepository.deletePhotosByIds(albumId,photoIds);
         return getPhotosDto(photoRepository.searchPhotos(albumId, null, null));
     }
@@ -79,7 +80,7 @@ public class PhotoService {
     /**
      * 사진 앨범 옮기기
      */
-    public List<PhotoDto> movePhotos(Long fromAlbumId, Long toAlbumId, List<Long> photoIds){
+    public PhotosDto movePhotos(Long fromAlbumId, Long toAlbumId, List<Long> photoIds){
         photoRepository.movePhotosByIds(fromAlbumId,toAlbumId,photoIds);
         return getPhotosDto(photoRepository.searchPhotos(toAlbumId, null, null));
     }
@@ -104,7 +105,7 @@ public class PhotoService {
         return ext;
     }
 
-    private List<PhotoDto> getPhotosDto(List<Photo> photos) {
+    private PhotosDto getPhotosDto(List<Photo> photos) {
         List<PhotoDto> photosDto = new ArrayList<>();
         for (Photo photo : photos) {
             photosDto.add(PhotoDto.builder()
@@ -115,6 +116,6 @@ public class PhotoService {
                     .build()
             );
         }
-        return photosDto;
+        return new PhotosDto(photosDto);
     }
 }

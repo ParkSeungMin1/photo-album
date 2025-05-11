@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import test.photo_album.dto.MoveRequest;
 import test.photo_album.dto.PhotoDto;
 import test.photo_album.dto.PhotosDto;
 import test.photo_album.service.PhotoService;
@@ -24,12 +25,12 @@ public class PhotoController {
 
     @GetMapping("/{albumId}/photos")
     public PhotosDto getPhotos(@PathVariable Long albumId, @RequestParam(value = "sort", required = false)LocalDateTime byDate, @RequestParam(value = "keyword",required = false) String byName){
-        return new PhotosDto(photoService.getPhotos(albumId,byDate,byName));
+        return photoService.getPhotos(albumId,byDate,byName);
     }
 
     @PostMapping("/{albumId}/photos")
     public PhotosDto uploadPhotos(@PathVariable Long albumId, @RequestParam("images")List<MultipartFile> files){
-        return new PhotosDto(photoService.uploadPhotos(albumId, files));
+        return photoService.uploadPhotos(albumId, files);
     }
 
     @GetMapping("/{albumId}/photos/{photoId}")
@@ -40,9 +41,11 @@ public class PhotoController {
     @DeleteMapping("/{albumId}/photos")
     public PhotosDto deletePhotos(@PathVariable Long albumId,@RequestBody Map<String,List<Long>> requestBody){
         List<Long> photoIds = requestBody.get("photoIds");
-        return new PhotosDto(photoService.deletePhotos(albumId, photoIds));
+        return photoService.deletePhotos(albumId, photoIds);
     }
 
-//    @PutMapping("/albums/{albumId}/photos/move")
-//    public Map<String, List<PhotoDto>>
+    @PutMapping("/{albumId}/photos/move")
+    public PhotosDto movePhotos(@PathVariable Long albumId, @RequestBody MoveRequest requestBody){
+        return photoService.movePhotos(requestBody.getFromAlbumId(), requestBody.getToAlbumId(), requestBody.getPhotoIds());
+    }
 }

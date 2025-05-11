@@ -46,7 +46,7 @@ public class PhotoRepositoryImpl implements PhotoRepositoryCustom {
         queryFactory
                 .update(photo)
                 .set(photo.album.id,toAlbumId)
-                .where(albumIdEq(fromAlbumId))
+                .where(albumIdEq(fromAlbumId), photo.id.in(photoIds))
                 .execute();
         em.flush();
         em.clear();
