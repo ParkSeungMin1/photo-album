@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface PhotoRepositoryCustom {
     List<Photo> searchPhotos(Long albumId,LocalDateTime byDate, String byName);
+    void deletePhotosByIds(Long albumId,List<Long> photoIds);
+    void movePhotosByIds(Long fromAlbumId, Long toAlbumId, List<Long> photoIds);
 }

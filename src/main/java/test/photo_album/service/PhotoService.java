@@ -30,12 +30,12 @@ public class PhotoService {
     private final PhotoRepository photoRepository;
     private final AlbumRepository albumRepository;
     private static final String UPLOAD_PATH = "C:/Users/user/Desktop/photo-album/src/main/resources/images/";
+
     /**
      * 사진 목록 불러오기
      */
     public List<PhotoDto> getPhotos(Long albumId, LocalDateTime byDate, String byName){
-        List<Photo> photos = photoRepository.searchPhotos(albumId,byDate,byName);
-        return getPhotosDto(photos);
+        return getPhotosDto(photoRepository.searchPhotos(albumId,byDate,byName));
     }
 
     /**
@@ -44,7 +44,6 @@ public class PhotoService {
      */
     public List<PhotoDto> uploadPhotos(Long albumId,List<MultipartFile> files){
         Album album = albumRepository.findById(albumId).get();
-        List<PhotoDto> photosDto = new ArrayList<>();
         List<Photo> photos = new ArrayList<>();
         for (MultipartFile file : files) {
             String ext = getExt(file);
@@ -59,16 +58,30 @@ public class PhotoService {
             }
         }
         photoRepository.saveAll(photos);
-        photosDto = getPhotosDto(photos);
-        return photosDto;
+        return getPhotosDto(photos);
+    }
+
+    /**
+     * 사진 지우기
+     */
+    public List<PhotoDto> deletePhotos(Long albumId, List<Long> photoIds){
+        photoRepository.deletePhotosByIds(albumId,photoIds);
+        return getPhotosDto(photoRepository.searchPhotos(albumId, null, null));
     }
 
     /**
      * 사진 상세정보 가져오기
      */
     public PhotoDto getPhoto(Long albumId, Long photoId){
-        Photo photo = photoRepository.findByIdAndAlbum_id(photoId, albumId);
-        return getPhotoDto(photo);
+        return getPhotoDto(photoRepository.findByIdAndAlbum_id(photoId, albumId));
+    }
+
+    /**
+     * 사진 앨범 옮기기
+     */
+    public List<PhotoDto> movePhotos(Long fromAlbumId, Long toAlbumId, List<Long> photoIds){
+        photoRepository.movePhotosByIds(fromAlbumId,toAlbumId,photoIds);
+        return getPhotosDto(photoRepository.searchPhotos(toAlbumId, null, null));
     }
 
     private PhotoDto getPhotoDto(Photo photo) {
