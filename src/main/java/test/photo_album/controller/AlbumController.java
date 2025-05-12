@@ -19,18 +19,18 @@ public class AlbumController {
     private final AlbumService albumService;
 
     @PostMapping
-    public AlbumDto create(@RequestBody Map<String,String> name){
+    public AlbumDto createAlbum(@RequestBody Map<String,String> name){
         String albumName = name.get("albumName");
         return albumService.createAlbum(albumName);
     }
 
     @DeleteMapping("/{albumId}")
-    public void delete(@PathVariable Long albumId){
+    public void deleteAlbum(@PathVariable Long albumId){
         albumService.deleteAlbum(albumId);
     }
 
     @PutMapping("/{albumId}")
-    public AlbumDto put(@PathVariable Long albumId, @RequestBody Map<String, String> name){
+    public AlbumDto putAlbum(@PathVariable Long albumId, @RequestBody Map<String, String> name){
         String albumName = name.get("albumName");
         return albumService.putAlbum(albumId,albumName);
     }
