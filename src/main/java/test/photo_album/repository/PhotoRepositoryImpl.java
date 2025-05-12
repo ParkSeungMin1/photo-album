@@ -42,6 +42,16 @@ public class PhotoRepositoryImpl implements PhotoRepositoryCustom {
     }
 
     @Override
+    public void deletePhotosByAlbumId(Long albumId) {
+        queryFactory
+                .delete(photo)
+                .where(albumIdEq(albumId))
+                .execute();
+        em.flush();
+        em.clear();
+    }
+
+    @Override
     public void movePhotosByIds(Long fromAlbumId, Long toAlbumId, List<Long> photoIds) {
         queryFactory
                 .update(photo)

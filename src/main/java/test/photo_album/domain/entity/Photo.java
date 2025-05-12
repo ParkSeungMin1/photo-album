@@ -34,11 +34,10 @@ public class Photo {
         this.album = album;
     }
 
-    public Photo(String fileName, String thumbUrl, String originalUrl, Long fileSize, Album album) {
+    public Photo(String fileName, String thumbUrl, String originalUrl, Long fileSize) {
         this.fileName = fileName;
         this.thumbUrl = thumbUrl;
         this.originalUrl = originalUrl;
         this.fileSize = fileSize;
-        this.album = album;
     }
 }

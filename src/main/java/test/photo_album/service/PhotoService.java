@@ -45,7 +45,6 @@ public class PhotoService {
      */
     public PhotosDto uploadPhotos(Long albumId,List<MultipartFile> files){
         Album album = albumRepository.findById(albumId).get();
-        List<Photo> photos = new ArrayList<>();
         for (MultipartFile file : files) {
             String ext = getExt(file);
             String storedFilename = UUID.randomUUID().toString()+'.'+ext;
@@ -53,13 +52,14 @@ public class PhotoService {
                 Path filePath = Paths.get(UPLOAD_PATH,storedFilename);
                 Files.createDirectories(filePath.getParent());
                 file.transferTo(filePath.toFile());
-                photos.add(new Photo(file.getOriginalFilename(), filePath.toString(), storedFilename,file.getSize(),album));
-            } catch (IOException e) {
+                Photo photo = new Photo(file.getOriginalFilename(), filePath.toString(), storedFilename, file.getSize());
+                album.addPhoto(photo);
+                } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
-        photoRepository.saveAll(photos);
-        return getPhotosDto(photos);
+        albumRepository.save(album);
+        return getPhotosDto(album.getPhotos());
     }
 
     /**

@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import test.photo_album.domain.entity.Album;
+import test.photo_album.domain.entity.Photo;
 import test.photo_album.dto.AlbumDto;
 import test.photo_album.repository.AlbumRepository;
+import test.photo_album.repository.PhotoRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ public class AlbumService {
 
     private final AlbumRepository albumRepository;
     private final PhotoService photoService;
+    private final PhotoRepository photoRepository;
 
     public List<AlbumDto> getAlbums(LocalDateTime byDate, String byName){
         List<Album> searchAlbums = albumRepository.findAlbumSearch(byDate, byName);
@@ -30,25 +33,27 @@ public class AlbumService {
 
     public AlbumDto getAlbum(Long albumId){
         Album findAlbum = albumRepository.findById(albumId).get();
-        //int count = findAlbum.getPhotos().size();
-        return getAlbumDto(findAlbum,0);
+        int count = photoRepository.countByAlbum_id(albumId);
+        return getAlbumDto(findAlbum,count);
     }
 
     public AlbumDto createAlbum(String albumName){
         Album createAlbum = albumRepository.save(new Album(albumName));
-        //int count = createAlbum.getPhotos().size();
+        int count = photoRepository.countByAlbum_id(createAlbum.getId());
 
-        return getAlbumDto(createAlbum, 0);
+        return getAlbumDto(createAlbum, count);
     }
 
     public void deleteAlbum(Long albumId){
+        photoRepository.deletePhotosByAlbumId(albumId);
         albumRepository.deleteById(albumId);
     }
 
     public AlbumDto putAlbum(Long albumId, String changeAlbumName){
         Album album = albumRepository.findById(albumId).get();
         album.changeAlbumName(changeAlbumName);
-        return getPutAlbumDto(album);
+        int count = photoService.getPhotos(albumId,null,null).getPhotos().size();
+        return getAlbumDto(album,count);
     }
 
     private static AlbumDto getAlbumDto(Album create, int count) {
@@ -60,23 +65,15 @@ public class AlbumService {
                 .build();
     }
 
-    private static AlbumDto getPutAlbumDto(Album album) {
-        return AlbumDto.builder()
-                .albumId(album.getId())
-                .albumName(album.getName())
-                .count(null)
-                .build();
-    }
-
     private static AlbumDto getSearchAlbumDto(Album album) {
         List<String> thumbUrl = new ArrayList<>();
-        //for (Photo photo : album.getPhotos()) {
-       //     thumbUrl.add(photo.getThumbUrl());
-        //}
+        for (Photo photo : album.getPhotos()) {
+            thumbUrl.add(photo.getThumbUrl());
+        }
         return AlbumDto.builder()
                 .albumId(album.getId())
                 .albumName(album.getName())
-                .count(0)
+                .count(album.getPhotos().size())
                 .createdAt(album.getCreatedAt())
                 .thumbUrl(thumbUrl)
                 .build();

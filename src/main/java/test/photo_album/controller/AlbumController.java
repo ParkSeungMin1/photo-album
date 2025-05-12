@@ -41,7 +41,7 @@ public class AlbumController {
     }
 
     @GetMapping
-    public List<AlbumDto> getAlbums(@RequestParam LocalDateTime sort, @RequestParam String keyword){
+    public List<AlbumDto> getAlbums(@RequestParam(required = false) LocalDateTime sort, @RequestParam(required = false) String keyword){
         List<AlbumDto> albums = albumService.getAlbums(sort, keyword);
         return albums;
     }
