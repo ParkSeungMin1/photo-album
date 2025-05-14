@@ -28,10 +28,9 @@ public class AlbumRepositoryImpl implements AlbumRepositoryCustom {
         return queryFactory
                 .selectFrom(album)
                 .distinct()
-                .join(album.photos,photo).fetchJoin()
+                .leftJoin(album.photos,photo).fetchJoin()
                 .where(byDateAfter(byDate), byNameContains(byName))
                 .fetch();
-
     }
 
     private BooleanExpression byNameContains(String byName) {

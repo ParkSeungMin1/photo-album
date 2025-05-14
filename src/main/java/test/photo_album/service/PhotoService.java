@@ -1,6 +1,7 @@
 package test.photo_album.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,9 @@ public class PhotoService {
 
     private final PhotoRepository photoRepository;
     private final AlbumRepository albumRepository;
-    private static final String UPLOAD_PATH = "C:/Users/user/Desktop/photo-album/src/main/resources/images/";
+
+    @Value("${upload.path}")
+    private String uploadPath;
 
     /**
      * 사진 목록 불러오기
@@ -49,7 +52,7 @@ public class PhotoService {
             String ext = getExt(file);
             String storedFilename = UUID.randomUUID().toString()+'.'+ext;
             try {
-                Path filePath = Paths.get(UPLOAD_PATH,storedFilename);
+                Path filePath = Paths.get(uploadPath,storedFilename);
                 Files.createDirectories(filePath.getParent());
                 file.transferTo(filePath.toFile());
                 Photo photo = new Photo(file.getOriginalFilename(), filePath.toString(), storedFilename, file.getSize());

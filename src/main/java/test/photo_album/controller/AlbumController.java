@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import test.photo_album.dto.AlbumDto;
+import test.photo_album.dto.AlbumsDto;
 import test.photo_album.service.AlbumService;
 
 import java.time.LocalDateTime;
@@ -41,8 +42,7 @@ public class AlbumController {
     }
 
     @GetMapping
-    public List<AlbumDto> getAlbums(@RequestParam(required = false) LocalDateTime sort, @RequestParam(required = false) String keyword){
-        List<AlbumDto> albums = albumService.getAlbums(sort, keyword);
-        return albums;
+    public AlbumsDto getAlbums(@RequestParam(required = false) LocalDateTime sort, @RequestParam(required = false) String keyword){
+        return new AlbumsDto(albumService.getAlbums(sort, keyword));
     }
 }

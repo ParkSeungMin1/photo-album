@@ -40,7 +40,6 @@ public class AlbumService {
     public AlbumDto createAlbum(String albumName){
         Album createAlbum = albumRepository.save(new Album(albumName));
         int count = photoRepository.countByAlbum_id(createAlbum.getId());
-
         return getAlbumDto(createAlbum, count);
     }
 
